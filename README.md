@@ -262,6 +262,11 @@ Formato de dados pronto para analytics
 ✔ Código legível e extensível
 
 ---
-## 👨‍💻 Autor
 
-Rafael Vinicius Brambilla Alves
+## 📄 Licença
+
+Este projeto está sob a licença **MIT**. Sinta-se livre para usar, estudar e adaptar.
+
+---
+
+👨‍💻 Desenvolvido para fins de estudo e evolução técnica.
