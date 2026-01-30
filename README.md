@@ -11,6 +11,9 @@
 ---
 
 ## 📌 Visão Geral
+Este projeto foi desenvolvido com base no **Desafio Data Engineer da QR Capital**, disponível em:  
+https://github.com/qrcapital/desafios/blob/main/desafio-data-eng.md
+
 
 Este projeto implementa um **pipeline de streaming de dados em tempo real** para coletar cotações de Bitcoin da exchange **Kraken**, processar os eventos via **Apache Kafka** e **Apache Spark Structured Streaming**, e armazenar os dados de forma **particionada e otimizada em formato Parquet**, com **orquestração via Apache Airflow**, tudo executando em ambiente **Docker**.
 
