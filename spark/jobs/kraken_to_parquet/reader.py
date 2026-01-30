@@ -9,7 +9,7 @@ def read_from_kafka(spark: SparkSession):
         .format("kafka")
         .option("kafka.bootstrap.servers", settings.kafka_bootstrap_servers)
         .option("subscribe", settings.kafka_topic)
-        .option("startingOffsets", "latest")
+        .option("startingOffsets", "earliest")
         .load()
         .selectExpr("CAST(value AS STRING) as json_string")
         .select(from_json(col("json_string"), KRAKEN_SCHEMA).alias("data"))

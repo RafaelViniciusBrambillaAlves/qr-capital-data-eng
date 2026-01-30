@@ -3,13 +3,11 @@ from pyspark.sql.functions import (
 )
 
 def transform(df, exchange: str, symbol: str):
-    df = df.withColumn(
-        "event_time",
-        from_unixtime(col("timestamp_ms") / 1000).cast("timestamp")
-    )
-
     return (
-        df 
+        df.withColumn(
+            "event_time",
+            from_unixtime(col("timestamp_ms") / 1000).cast("timestamp")
+        )
         .withColumn("hour", hour("event_time"))
         .withColumn("day", dayofmonth("event_time"))
         .withColumn("month", month("event_time"))

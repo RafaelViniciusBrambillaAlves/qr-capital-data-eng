@@ -1,20 +1,15 @@
-import os 
-from pyspark.sql.functions import col
+from pyspark.sql import DataFrame
 
-def write_partitioned(df, base_path, exchange):
-    output_dir = os.path.join(base_path, exchange)
+def write_partitioned(df: DataFrame, base_output_path: str, exchange: str):
+    output_path = f"{base_output_path}/{exchange}"
 
-    query = (
-        df
-        .writeStream
-        .outputMode("append")
+    return (
+        df.writeStream
         .format("parquet")
-        .option("path", output_dir)
-        .option("checkpointLocation", os.path.join(output_dir, "_checkpoints"))
-        .option("header", "true")
+        .outputMode("append")
+        .option("path", output_path)
+        .option("checkpointLocation", f"{output_path}/_checkpoints")
         .partitionBy("year", "month", "day", "hour", "symbol")
-        .trigger(processingTime = "10 seconds")
+        .trigger(availableNow=True)   # 🔥 A CHAVE DA SOLUÇÃO
         .start()
     )
-    
-    return query
