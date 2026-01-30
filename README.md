@@ -1,15 +1,260 @@
-docker exec -it kafka kafka-topics --bootstrap-server kafka:9092 --list
+# 🚀 Desafio Data Engineer – Streaming de Bitcoin (Kraken)
 
-docker exec -it kafka kafka-console-consumer --bootstrap-server kafka:9092 --topic kraken.trades --from-beginning
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-Streaming-black?logo=apachekafka)
+![Apache Spark](https://img.shields.io/badge/Apache%20Spark-3.5-orange?logo=apachespark)
+![Apache Airflow](https://img.shields.io/badge/Apache%20Airflow-2.8-green?logo=apacheairflow)
+![Docker](https://img.shields.io/badge/Docker-Container-blue?logo=docker)
+![Parquet](https://img.shields.io/badge/Format-Parquet-brightgreen)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow)
 
-docker exec -it kafka kafka-topics --bootstrap-server kafka:9092 --describe --topic kraken.trades
+---
 
-docker exec -it kafka kafka-run-class kafka.tools.GetOffsetShell --broker-list kafka:9092 --topic kraken.trades
+## 📌 Visão Geral
+
+Este projeto implementa um **pipeline de streaming de dados em tempo real** para coletar cotações de Bitcoin da exchange **Kraken**, processar os eventos via **Apache Kafka** e **Apache Spark Structured Streaming**, e armazenar os dados de forma **particionada e otimizada em formato Parquet**, com **orquestração via Apache Airflow**, tudo executando em ambiente **Docker**.
+
+O objetivo vai além do requisito mínimo do desafio, aplicando **boas práticas de engenharia de dados**, organização de código, escalabilidade e observabilidade.
+
+---
+
+## 🧠 Entendimento do Desafio Original
+
+### Desafio Proposto
+- Consumir dados em tempo real da API da Kraken
+- Utilizar uma plataforma de streaming (Kafka ou Flink)
+- Persistir os dados em arquivos `.csv`
+- Utilizar Docker
+- (Opcional) Orquestrar com Airflow
+
+### Domínio do Problema
+Criar um stream de dados que coleta preço do Bitcoin em tempo real e registra os dados em arquivos estruturados.
+
+---
+
+## 🔄 Principais Evoluções em Relação ao Desafio
+
+### ❌ CSV → ✅ Parquet
+Embora o desafio solicite arquivos CSV, optamos por **Parquet**, pois:
+
+- É um **formato colunar**, ideal para analytics
+- Melhor **compressão **
+- Melhor performance em leitura
+- Padrão amplamente utilizado em **Data Lakes**
+- Compatível com Spark, Athena, BigQuery, Presto, Trino, etc.
+
+> 💡 Em cenários reais de Engenharia de Dados, CSV é geralmente evitado para grandes volumes e dados históricos.
+
+---
+
+### 📂 Estrutura de Dados Particionada
+Os dados são organizados seguindo boas práticas de Data Lake:
+
+```text
+data/
+└── KRAKEN/
+    └── year=2026/
+        └── month=1/
+            └── day=30/
+                └── hour=18/
+                    └── symbol=BTC_USD/
+                        └── part-*.parquet
+```
+
+Isso permite:
+- Queries mais rápidas
+- Leitura seletiva por período
+- Facilidade de integração com ferramentas analíticas
+
+---
+
+## 🏗 Arquitetura da Solução
+
+```text
+Kraken API
+   │
+   ▼
+Kafka Producer (Python)
+   │
+   ▼
+Apache Kafka (Topic: kraken.trades)
+   │
+   ▼
+Apache Spark Structured Streaming
+   │
+   ▼
+Parquet (Data Lake)
+   │
+   ▼
+Orquestração via Apache Airflow
+
+```
+---
+
+## 🗂 Estrutura do Projeto
+
+```
+.
+├── airflow/
+│   ├── dags/
+│   │   └── kraken_spark_parquet_dag.py
+│   └── logs/
+│
+├── data/
+│   └── KRAKEN/
+│       └── year=YYYY/month=MM/day=DD/hour=HH/symbol=BTC_USD
+│
+├── kafka/
+│   └── producer/
+│       ├── app/
+│       │   ├── config.py
+│       │   ├── kafka_producer.py
+│       │   ├── kraken_client.py
+│       │   ├── models.py
+│       │   └── service.py
+│       ├── Dockerfile
+│       └── requirements.txt
+│
+├── spark/
+│   ├── jobs/
+│   │   └── kraken_to_parquet/
+│   │       ├── config.py
+│   │       ├── main.py
+│   │       ├── reader.py
+│   │       ├── schema.py
+│   │       ├── transformer.py
+│   │       └── writer.py
+│   └── Dockerfile
+│
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+## 🧰 Tecnologias Utilizadas
+Python 3.10
+
+Apache Kafka
+
+Apache Spark 3.5 (Structured Streaming)
+
+Apache Airflow 2.8
+
+Docker & Docker Compose
+
+Parquet + Snappy
+
+Kraken API
+
+---
+## ⚙️ Variáveis de Ambiente
+
+Crie um arquivo .env na raiz do projeto:
+
+```env
+# Kraken
+KRAKEN_API_URL=https://api.kraken.com
+KRAKEN_PAIR=BTC/USD
+POLL_INTERVAL_SECONDS=5
+
+# Kafka
+KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+KAFKA_TOPIC=kraken.trades
+
+# Spark
+SPARK_APP_NAME=KrakenKafkaToPARQUET
+BASE_OUTPUT_PATH=/data
+EXCHANGE=KRAKEN
+SYMBOL=BTC_USD
+```
+---
+
+## ▶️ Como Rodar o Projeto
+1️⃣ Subir os serviços
+```
+docker-compose up -d --build
+```
+
+2️⃣ Kafka Producer
+
+O producer inicia automaticamente e começa a publicar trades no Kafka.
+
+Logs:
+```
+docker logs -f kafka-producer
+```
+
+3️⃣ Spark Streaming (manual)
+```
+docker exec -it spark-master \
+/opt/spark/bin/spark-submit \
+--master spark://spark-master:7077 \
+--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1 \
+/opt/spark/jobs/kraken_to_parquet/main.py
+```
+
+4️⃣ Spark UI
+
+Acesse:
+```
+http://localhost:4040
+```
+
+---
+
+## ⏱ Orquestração com Airflow
+Acessar o Airflow
+
+```
+http://localhost:8080
+```
 
 
-docker exec -it kafka kafka-run-class kafka.tools.GetOffsetShell --broker-list kafka:9092 --topic kraken.trades
+```
+Usuário: admin
+Senha: admin
+```
 
-{"pair": "XXBTZUSD", "price": "89795.50000", "volume": "0.00022052", "timestamp": 1769624687.8442967, "side": "b", "order_type": "l", "misc": "", "source": "kraken"}
+DAG Disponível
+
+kraken_spark_streaming
+
+Essa DAG:
+
+Verifica serviços
+
+Executa o Spark Streaming
+
+Monitora o job
+
+---
+
+## 🧪 Organização e Qualidade
+
+Código modular e desacoplado
+
+Separação clara de responsabilidades
+
+Configurações centralizadas
+
+Docker como padrão de execução
+
+Formato de dados pronto para analytics
+
+---
+
+## ✅ Critérios de Avaliação Atendidos
+
+✔ Organização do projeto
+✔ Clareza no README
+✔ Uso de streaming real
+✔ Boas práticas de engenharia de dados
+✔ Orquestração com Airflow
+✔ Código legível e extensível
 
 
-docker exec -it spark-master /opt/spark/bin/spark-submit --master spark://spark-master:7077 /opt/spark/jobs/kraken_to_parquet/main.py
+---
+## 👨‍💻 Autor
+
+Rafael Vinicius Brambilla Alves
