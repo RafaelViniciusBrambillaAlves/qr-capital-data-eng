@@ -247,12 +247,16 @@ Formato de dados pronto para analytics
 ## ✅ Critérios de Avaliação Atendidos
 
 ✔ Organização do projeto
-✔ Clareza no README
-✔ Uso de streaming real
-✔ Boas práticas de engenharia de dados
-✔ Orquestração com Airflow
-✔ Código legível e extensível
 
+✔ Clareza no README
+
+✔ Uso de streaming real
+
+✔ Boas práticas de engenharia de dados
+
+✔ Orquestração com Airflow
+
+✔ Código legível e extensível
 
 ---
 ## 👨‍💻 Autor
