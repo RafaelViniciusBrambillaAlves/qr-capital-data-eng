@@ -10,6 +10,6 @@ def write_partitioned(df: DataFrame, base_output_path: str, exchange: str):
         .option("path", output_path)
         .option("checkpointLocation", f"{output_path}/_checkpoints")
         .partitionBy("year", "month", "day", "hour", "symbol")
-        .trigger(availableNow=True)   # 🔥 A CHAVE DA SOLUÇÃO
+        .trigger(availableNow=True)  
         .start()
     )
