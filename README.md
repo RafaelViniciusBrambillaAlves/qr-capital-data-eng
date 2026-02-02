@@ -44,7 +44,7 @@ Embora o desafio solicite arquivos CSV, optamos por **Parquet**, pois:
 - Melhor **compressão **
 - Melhor performance em leitura
 - Padrão amplamente utilizado em **Data Lakes**
-- Compatível com Spark, Athena, BigQuery, Presto, Trino, etc.
+- Compatível com Spark, Athena, BigQuery, etc.
 
 > 💡 Em cenários reais de Engenharia de Dados, CSV é geralmente evitado para grandes volumes e dados históricos.
 
