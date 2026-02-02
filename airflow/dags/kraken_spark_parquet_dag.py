@@ -3,7 +3,6 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
 from datetime import datetime, timedelta
-import os
 
 default_args = {
     'owner': 'data_eng',
@@ -17,17 +16,17 @@ default_args = {
 
 with DAG(
     dag_id='kraken_spark_streaming',
-    default_args=default_args,
-    description='Stream Bitcoin prices from Kraken to Parquet',
-    schedule_interval='@daily', 
-    catchup=False,
-    tags=['bitcoin', 'kraken', 'spark', 'kafka'],
+    default_args = default_args,
+    description = 'Stream Bitcoin prices from Kraken to Parquet',
+    schedule_interval = '@daily', 
+    catchup = False,
+    tags = ['bitcoin', 'kraken', 'spark', 'kafka'],
 ) as dag:
     
     start = DummyOperator(task_id='start')
     
     check_services = BashOperator(
-        task_id='check_services',
+        task_id = 'check_services',
         bash_command="""
         docker ps | grep spark-master && \
         docker ps | grep kafka && \
@@ -36,8 +35,8 @@ with DAG(
     )
     
     run_spark_stream = BashOperator(
-        task_id='run_spark_stream',
-        bash_command="""
+        task_id = 'run_spark_stream',
+        bash_command = """
         docker exec spark-master \
         /opt/spark/bin/spark-submit \
         --master spark://spark-master:7077 \
@@ -48,12 +47,12 @@ with DAG(
     )
 
     monitor_stream = BashOperator(
-        task_id='monitor_stream',
-        bash_command="""
+        task_id = 'monitor_stream',
+        bash_command = """
         echo "Streaming job started. Check Spark UI at http://localhost:4040"
         """,
     )
     
-    end = DummyOperator(task_id='end')
+    end = DummyOperator(task_id = 'end')
     
     start >> check_services >> run_spark_stream >> monitor_stream >> end
