@@ -1,12 +1,12 @@
 # 🚀 Desafio Data Engineer – Streaming de Bitcoin (Kraken)
 
-![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
-![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-Streaming-black?logo=apachekafka)
-![Apache Spark](https://img.shields.io/badge/Apache%20Spark-3.5-orange?logo=apachespark)
-![Apache Airflow](https://img.shields.io/badge/Apache%20Airflow-2.8-green?logo=apacheairflow)
-![Docker](https://img.shields.io/badge/Docker-Container-blue?logo=docker)
-![Parquet](https://img.shields.io/badge/Format-Parquet-brightgreen)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Kafka](https://img.shields.io/badge/Kafka-000000?style=for-the-badge&logo=apachekafka&logoColor=white)
+![Spark](https://img.shields.io/badge/Apache_Spark-FDEE21?style=for-the-badge&logo=apachespark&logoColor=black)
+![Airflow](https://img.shields.io/badge/Airflow-017CEE?style=for-the-badge&logo=apacheairflow&logoColor=white)
+![Parquet](https://img.shields.io/badge/Parquet-50ABF1?style=for-the-badge&logo=apachearrow&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Streaming](https://img.shields.io/badge/Real_Time-Streaming-FF6F00?style=for-the-badge)
 
 ---
 
