@@ -28,7 +28,7 @@ O objetivo vai além do requisito mínimo do desafio, aplicando **boas práticas
 - Utilizar uma plataforma de streaming (Kafka)
 - Persistir os dados em arquivos `.csv`
 - Utilizar Docker
-- (Opcional) Orquestrar com Airflow
+- Orquestrar com Airflow
 
 ### Domínio do Problema
 Criar um stream de dados que coleta preço do Bitcoin em tempo real e registra os dados em arquivos estruturados.
