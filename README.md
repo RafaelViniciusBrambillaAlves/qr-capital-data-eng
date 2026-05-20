@@ -25,7 +25,7 @@ O objetivo vai além do requisito mínimo do desafio, aplicando **boas práticas
 
 ### Desafio Proposto
 - Consumir dados em tempo real da API da Kraken
-- Utilizar uma plataforma de streaming (Kafka ou Flink)
+- Utilizar uma plataforma de streaming (Kafka)
 - Persistir os dados em arquivos `.csv`
 - Utilizar Docker
 - (Opcional) Orquestrar com Airflow
